@@ -1,0 +1,8 @@
+{
+  "lib/v4-hooks-public": {
+    "rev": "ffd7f8a8d1f5df5deb6f41c8d2ba99d118244ed6"
+  },
+  "lib/v4-periphery": {
+    "rev": "3245c3cb99c48fa1dc2459c3b60abc37d4294aba"
+  }
+}

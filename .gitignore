@@ -1,0 +1,40 @@
+# Foundry build output
+out/
+cache/
+broadcast/
+
+# Dependencies are pinned as submodules at the commits listed in the README.
+# Ignore anything else dropped into lib/, but keep the two gitlinks so a clone
+# with --recurse-submodules can build.
+lib/*
+!lib/v4-periphery
+!lib/v4-hooks-public
+
+# App workspace build output. The differential-test fixture in
+# packages/core/fixtures IS committed -- it is the contract's own output and
+# the TypeScript port is worthless without it.
+node_modules/
+dist/
+.next/
+.turbo/
+
+# Env / secrets
+.env
+.env.*
+files.zip
+sim-out/
+
+# Local tooling state — logs absolute paths (/Users/<name>/...), never publish
+.deepsec/
+.DS_Store
+
+# Ponder's local build/state cache: ~29MB of derived files, rebuilt on start.
+apps/indexer/.ponder/
+*.tsbuildinfo
+
+# Deployment tooling references live infrastructure by address. Kept local.
+scripts/deploy-*.sh
+
+# External audit reports. Security deliverables, not code; published separately
+# if at all.
+*.docx

@@ -1,0 +1,46 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.26"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+# REQUIRED, not a preference: the legacy pipeline compiles BithookMiningHook to
+# 24,846 bytes, which is 270 over EIP-170's 24,576 runtime limit, so the hook
+# simply cannot be deployed. via_ir brings it to 21,853 (2,723 of margin) while
+# leaving optimizer_runs at 200, so runtime gas is not traded away for it.
+# Lowering optimizer_runs does NOT solve this -- even runs=1 only reaches
+# 24,650, still 74 bytes over. Do not remove without re-checking `forge build
+# --sizes`; the test suite installs the hook with deployCodeTo, which bypasses
+# the size limit entirely and will NOT catch a regression here.
+via_ir = true
+fs_permissions = [
+    { access = "read", path = "./" },
+    # the economic simulation writes its CSV here and nowhere else
+    { access = "read-write", path = "./sim-out" },
+    # DumpFixtures.t.sol writes the differential-test fixture the TypeScript
+    # port in packages/core is asserted against. Dev tooling only.
+    { access = "read-write", path = "./packages/core/fixtures" },
+]
+
+# The agent-based launch simulation (test/sim/BithookSim.t.sol) runs a whole
+# year of mining inside a single EVM transaction, which blows past the default
+# 2^30 gas limit. Kept off the default profile so ordinary `forge test` runs
+# retain a realistic ceiling.
+#   FOUNDRY_PROFILE=sim SIM_RUN=1 forge test --match-contract BithookSim -vv
+[profile.sim]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.26"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+via_ir = true
+gas_limit = "18446744073709551615"
+memory_limit = 8589934592
+fs_permissions = [
+    { access = "read", path = "./" },
+    { access = "read-write", path = "./sim-out" },
+]
